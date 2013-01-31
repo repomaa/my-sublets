@@ -191,7 +191,11 @@ end # }}}
 configure :volume_perc do |s| # {{{
   s.interval = 240
   s.step     = s.config[:step] || 5
-  s.percent     = s.config[:percent] || true
+  if s.config[:percent].nil?
+      s.percent = true
+  else
+      s.percent     = s.config[:percent]
+  end
   s.mixer    = Mixer.new
   s.icons    = {
     :on  => Subtlext::Icon.new("spkr_01.xbm"),
