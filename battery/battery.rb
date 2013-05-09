@@ -67,7 +67,8 @@ module Battery
     end
 
     def self.apply_to_all a_proc, &selection
-      @@rules.select {|name, rule| selection.call(rule, name)}.each do |name, rule|
+      filtered_rules = @@rules.values.select {|rule| selection.call(rule)}
+      filtered_rules.each do |rule|
         a_proc.call(rule)
       end
     end
