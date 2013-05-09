@@ -4,6 +4,9 @@ module Battery
 
     @@rules = {}
 
+    attr_accessor :state
+    attr_reader :name
+
     def initialize name
       @name = name
       yield self
@@ -32,14 +35,6 @@ module Battery
 
     def trigger_at value
       @trigger = value
-    end
-
-    def state
-      @state
-    end
-
-    def state= state
-      @state = state
     end
 
     def task &task
