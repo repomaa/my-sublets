@@ -57,6 +57,7 @@ end
 BatteryRule.new(:suspend) do |r|
   r.state = :discharging
   r.trigger_at 0..1
+  r.run_once
   r.task do
     notify("Going to suspend to prevent data loss", :critical)
     # execute executes a given command
