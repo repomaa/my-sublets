@@ -117,6 +117,7 @@ module Battery
   end # }}}
 
 end
+
 # Battery sublet file
 # Created with sur-0.1
 configure :battery do |s| # {{{

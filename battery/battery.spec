@@ -3,7 +3,7 @@
 Sur::Specification.new do |s|
   # Sublet information
   s.name        = "Battery"
-  s.version     = "0.9"
+  s.version     = "1.0"
   s.tags        = [ "Sys", "Icon", "Config" ]
   s.files       = [ "battery.rb" ]
   s.icons       = [
@@ -15,7 +15,7 @@ Sur::Specification.new do |s|
 
   # Sublet description
   s.description = "Show the battery state"
-  s.notes       = <<NOTES
+  s.notes       =<<NOTES
 This sublet displays the remaining battery power (percent) and the
 state of the power adapter. (icon)
 
@@ -31,8 +31,8 @@ end
 NOTES
 
   # Sublet authors
-  s.authors     = [ "Christoph Kappel" ]
-  s.date        = "Fri Apr 21 14:23 CET 2011"
+  s.authors     = [ "Christoph Kappel", "Joakim Reinert" ]
+  s.date        = "Fri May 10 20:08 CET 2013"
   s.contact     = "chkappel@gmail.com"
 
   # Sublet config
@@ -62,12 +62,9 @@ NOTES
       :def_value   => "false"
     },
     {
-      :name        => "rules_path"
-      :type        => "string"
-      :description => "Path to rules file"
+      :name        => "rules_path",
+      :type        => "string",
+      :description => "Path to rules file",
       :def_value   => "~/.config/subtle/battery_rules.rb"
-    }
-      
-}
-  ]
+    }]
 end
