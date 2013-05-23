@@ -13,7 +13,7 @@ Sur::Specification.new do |s|
   s.description = "Display pacman available updates"
   s.notes       = <<NOTES
 Show updates available in Archs pacman package manager
-Needs this: https://gist.github.com/952010 run as a cronjob
+Needs this: https://raw.github.com/supasnashbuhl/my-sublets/master/pacman/poll-updates.sh run as a cronjob
 NOTES
 
   # Sublet authors
@@ -45,7 +45,7 @@ NOTES
       :name        => "repositories",
       :type        => "hash",
       :description => "Hash containing the repositories that are displayed (with labels as values)",
-      :def_value   => '"core" => "!:", "extra" => "e:", "community" => "c:"'
+      :def_value   => '"core" => nil, "extra" => nil, "community" => nil'
     }
   ]
 
