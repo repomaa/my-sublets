@@ -54,9 +54,9 @@ NOTES
       :def_value   => "true"
     },
     {
-      :name        => "colors" 
-      :type        => "hash"
-      :description => "Specify colors for repo names"
+      :name        => "colors",
+      :type        => "hash",
+      :description => "Specify colors for repo names",
       :def_value   => "{}"
     }
   ]
