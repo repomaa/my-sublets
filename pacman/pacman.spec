@@ -7,7 +7,7 @@ Sur::Specification.new do |s|
   s.version     = "0.2"
   s.tags        = [ ]
   s.files       = [ "pacman.rb" ]
-  s.icons       = [ "pacman.xbm" ]
+  s.icons       = [ "pacman.xbm", "dot.xbm", "bigdot.xbm" ]
 
   # Sublet description
   s.description = "Display pacman available updates"
@@ -46,6 +46,12 @@ NOTES
       :type        => "hash",
       :description => "Hash containing the repositories that are displayed (with labels as values)",
       :def_value   => '"core" => nil, "extra" => nil, "community" => nil'
+    },
+    {
+      :name        => "serious",
+      :type        => "boolean",
+      :description => "Try and see ;)",
+      :def_value   => "true"
     }
   ]
 
