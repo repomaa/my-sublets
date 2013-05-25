@@ -5,18 +5,29 @@ configure :pacman do |s|
   s.dot = Subtlext::Icon.new( "dot.xbm" )
   s.bigdot = Subtlext::Icon.new( "bigdot.xbm" )
   s.interval =   s.config[:interval]   || 3600
-  s.separator =  s.config[:separator]  || " "
+  s.serious = true unless s.config[:serious] == false
+  if s.serious
+    s.separator =  s.config[:separator]  || " / "
+  else
+    s.separator = s.config[:separator] || :ghost
+  end
   s.updatefile = s.config[:updatefile] || "#{ENV['HOME']}/.pacmanupdates"
   s.repositories = s.config[:repositories] || {"core" => nil, "extra" => nil, "community" => nil}
-  s.serious = true unless s.config[:serious] == false
   s.color_def = Subtlext::Subtle.colors[:sublets_fg]
   s.sep_color_def = Subtlext::Subtle.colors[:separator_fg]
   s.zeroes = true unless s.config[:zeroes] == false
   s.colors = {}
   if(s.config[:colors].is_a?(Hash))
     s.config[:colors].each do |k, v|
-      s.colors[k] = Subtlext::Color.new(v)
+      if v.is_a? Array
+        s.colors[k] = v.map {|c| Subtlext::Color.new(c)}
+      else
+        s.colors[k] = Subtlext::Color.new(v)
+      end
     end
+  end
+  if s.separator == :ghost
+    s.separator = Subtlext::Icon.new( "ghost.xbm" )
   end
 end
 
@@ -46,7 +57,12 @@ helper do |s|
     f.close
 
     color = self.colors["separator"] || self.sep_color_def
-    sep = color + self.separator
+    sep = []
+    if color.is_a? Array
+      color.each {|c| sep << (c + self.separator)}
+    else
+      sep << (color + self.separator)
+    end
     counts = []
     if serious
       self.repositories.each do |name, abbr|
@@ -66,7 +82,15 @@ helper do |s|
         end
       end
     end
-    self.data = self.icon + ' ' + counts.join(sep)
+    icon_color = self.colors["pacman"] || ""
+    format_data = icon_color + self.icon
+    counts.each_with_index do |count, index|
+      format_data += count
+      if (index + 1) < counts.size
+        format_data += sep[index%sep.size]
+      end
+    end
+    self.data = format_data
   end
 end
 

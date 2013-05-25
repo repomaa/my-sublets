@@ -7,7 +7,7 @@ Sur::Specification.new do |s|
   s.version     = "0.2"
   s.tags        = [ ]
   s.files       = [ "pacman.rb" ]
-  s.icons       = [ "pacman.xbm", "dot.xbm", "bigdot.xbm" ]
+  s.icons       = [ "pacman.xbm", "dot.xbm", "bigdot.xbm", "ghost.xbm" ]
 
   # Sublet description
   s.description = "Display pacman available updates"
@@ -56,7 +56,7 @@ NOTES
     {
       :name        => "colors",
       :type        => "hash",
-      :description => "Specify colors for repos and separator",
+      :description => "Specify colors for pacman logo, repos and separator (separator can have an array of colors as value, it will then be iterated when inserting it)",
       :def_value   => "{}"
     },
     {
