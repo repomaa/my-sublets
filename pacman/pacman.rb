@@ -5,11 +5,13 @@ configure :pacman do |s|
   s.dot = Subtlext::Icon.new( "dot.xbm" )
   s.bigdot = Subtlext::Icon.new( "bigdot.xbm" )
   s.interval =   s.config[:interval]   || 3600
-  s.separator =  s.config[:separator]  || " // "
+  s.separator =  s.config[:separator]  || " "
   s.updatefile = s.config[:updatefile] || "#{ENV['HOME']}/.pacmanupdates"
-  s.repositories = s.config[:repositories] || {"core" => "!:", "extra" => "e:", "community" => "c:"}
+  s.repositories = s.config[:repositories] || {"core" => nil, "extra" => nil, "community" => nil}
   s.serious = true unless s.config[:serious] == false
-  s.color_def  = Subtlext::Subtle.colors[:sublets_fg]
+  s.color_def = Subtlext::Subtle.colors[:sublets_fg]
+  s.sep_color_def = Subtlext::Subtle.colors[:separator_fg]
+  s.zeroes = true unless s.config[:zeroes] == false
   s.colors = {}
   if(s.config[:colors].is_a?(Hash))
     s.config[:colors].each do |k, v|
@@ -30,22 +32,29 @@ helper do |s|
     end
 
     # Count occurences of "core", "extra" and "community" in details
+    packages = []
     f.each_line do |line|
       words = line.split("/")
       if words.any? && h.has_key?(words.first)
-        h[words.first] += 1
+        unless packages.include? words[1]
+          h[words[0]] += 1
+          packages << words[1]
+        end
       end
     end
 
     f.close
 
+    color = self.colors["separator"] || self.sep_color_def
+    sep = color + self.separator
     counts = []
     if serious
       self.repositories.each do |name, abbr|
-        label = abbr || ""
-        counts << (label + h[name].to_s)
+        if (h[name] != 0 || self.zeroes)
+          label = abbr || ""
+          counts << (label + h[name].to_s)
+        end
       end
-      counts = counts.join self.separator
     else
       self.repositories.each do |name, abbr|
         if h[name] > 0
@@ -56,9 +65,8 @@ helper do |s|
           counts << count
         end
       end
-      counts = counts.join ' '
     end
-    self.data = self.icon + ' ' + counts
+    self.data = self.icon + ' ' + counts.join(sep)
   end
 end
 

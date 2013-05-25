@@ -56,8 +56,14 @@ NOTES
     {
       :name        => "colors",
       :type        => "hash",
-      :description => "Specify colors for repo names",
+      :description => "Specify colors for repos and separator",
       :def_value   => "{}"
+    },
+    {
+      :name        => "zeroes",
+      :type        => "true",
+      :description => "Display zero when there are no updates in a repo (only matters with serious == true)",
+      :def_value   => "true"
     }
   ]
 
