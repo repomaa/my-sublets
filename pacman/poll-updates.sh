@@ -13,7 +13,10 @@ nice -n 50 pacman -Syuwq --noconfirm > /dev/null
 # pacman -Sy > /dev/null
 
 # Write the packages needing an update to file
-pacman -Quq | tr "\\n" " " | xargs expac -S '%r/%n [%v]' > /home/$user/.pacmanupdates
+packages=$(pacman -Quq | tr "\\n" " ")
+if [ -n "$packages" ]; then
+  expac -S '%r/%n [%v]' $packages > /home/$user/.pacmanupdates
+fi
 
 # Update sublet
 subtler -su pacman > /dev/null
