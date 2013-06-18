@@ -13,6 +13,7 @@ nice -n 50 pacman -Syuwq --noconfirm > /dev/null
 # pacman -Sy > /dev/null
 
 # Write the packages needing an update to file
+echo "" > /home/$user/.pacmanupdates
 packages=$(pacman -Quq | tr "\\n" " ")
 if [ -n "$packages" ]; then
   expac -S '%r/%n [%v]' $packages > /home/$user/.pacmanupdates
