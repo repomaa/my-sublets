@@ -162,6 +162,8 @@ configure :battery do |s| # {{{
   end
 
   s.time     = false || s.config[:time]
+  s.power    = false || s.config[:power]
+  s.separator = s.config[:separator] || " "
 
   # Find battery slot and capacity
   begin
@@ -190,8 +192,8 @@ configure :battery do |s| # {{{
     # Assemble paths
     s.now    = File.join(path, now)
     s.status = File.join(path, "status")
-    s.energy = File.join(path, energy)
-    s.power = File.join(path, power)
+    s.energy_now = File.join(path, energy)
+    s.power_now = File.join(path, power)
 
     # Get full capacity
     s.full = IO.readlines(File.join(path, full)).first.to_i
@@ -214,8 +216,8 @@ on :run do |s| # {{{
     state   = IO.readlines(s.status).first.chop
     percent = (now * 100 / s.full).to_i
 
-    energy = File.read(s.energy).chomp.to_f
-    power = File.read(s.power).chomp.to_f
+    energy = File.read(s.energy_now).chomp.to_f
+    power = File.read(s.power_now).chomp.to_f
   
     time = energy / power
 
@@ -243,13 +245,24 @@ on :run do |s| # {{{
 
     Battery::BatteryRule.trigger_all state.downcase.to_sym, percent
 
+
     data = "%s%s%s%d%%" % [
       s.color_icon ? s.color : s.color_def, s.icons[icon],
       s.color_text ? s.color : s.color_def, percent
     ]
     if s.time
-      data << " #{time.round(2)}h"
+      data << s.separator
+      data << "#{time.round(2)}h"
     end
+
+    if s.power
+      data << s.separator
+      while power > 100 do
+        power /= 1000
+      end
+      data << "#{power.round(2)}W"
+    end
+    
     s.data = data
   rescue => err # Sanitize to prevent unloading
     s.data = "subtle"

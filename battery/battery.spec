@@ -71,6 +71,18 @@ NOTES
       :name        => "time",
       :type        => "bool",
       :description => "Show remaining time",
-      :def_value   => "false",
+      :def_value   => "false"
+    },
+    {
+      :name        => "power",
+      :type        => "bool",
+      :description => "Show current power consumption",
+      :def_value   => "false"
+    },
+    {
+      :name        => "separator",
+      :type        => "string",
+      :description => "Information separator string",
+      :def_value   => " "
     }]
 end
