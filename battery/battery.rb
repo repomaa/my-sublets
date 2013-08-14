@@ -26,7 +26,9 @@ module Battery
     end
 
     def self.load_rules path
-      eval(IO.readlines(path).join("; "))
+      if File.exists? path
+        eval(IO.readlines(path).join("; "))
+      end
     end
 
     def run_once
@@ -159,6 +161,8 @@ configure :battery do |s| # {{{
     s.color_keys = s.colors.keys.sort.reverse
   end
 
+  s.time     = false || s.config[:time]
+
   # Find battery slot and capacity
   begin
     path = s.config[:path] || Dir["/sys/class/power_supply/B*"].first
@@ -173,9 +177,21 @@ configure :battery do |s| # {{{
       now  = "energy_now"
     end
 
+    energy = ""
+    power = ""
+    if(File.exist?(File.join(path, "energy_now")))
+      energy = "energy_now"
+    end
+  
+    if(File.exist?(File.join(path, "power_now")))
+      power = "power_now"
+    end
+
     # Assemble paths
     s.now    = File.join(path, now)
     s.status = File.join(path, "status")
+    s.energy = File.join(path, energy)
+    s.power = File.join(path, power)
 
     # Get full capacity
     s.full = IO.readlines(File.join(path, full)).first.to_i
@@ -197,6 +213,11 @@ on :run do |s| # {{{
     now     = IO.readlines(s.now).first.to_i
     state   = IO.readlines(s.status).first.chop
     percent = (now * 100 / s.full).to_i
+
+    energy = File.read(s.energy).chomp.to_f
+    power = File.read(s.power).chomp.to_f
+  
+    time = energy / power
 
     # Select color
     unless(s.colors.nil?)
@@ -222,10 +243,14 @@ on :run do |s| # {{{
 
     Battery::BatteryRule.trigger_all state.downcase.to_sym, percent
 
-    s.data = "%s%s%s%d%%" % [
+    data = "%s%s%s%d%%" % [
       s.color_icon ? s.color : s.color_def, s.icons[icon],
       s.color_text ? s.color : s.color_def, percent
     ]
+    if s.time
+      data << " #{time.round(2)}h"
+    end
+    s.data = data
   rescue => err # Sanitize to prevent unloading
     s.data = "subtle"
     p err

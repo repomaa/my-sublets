@@ -3,7 +3,7 @@
 Sur::Specification.new do |s|
   # Sublet information
   s.name        = "Battery"
-  s.version     = "1.0"
+  s.version     = "1.1"
   s.tags        = [ "Sys", "Icon", "Config" ]
   s.files       = [ "battery.rb" ]
   s.icons       = [
@@ -66,5 +66,11 @@ NOTES
       :type        => "string",
       :description => "Path to rules file",
       :def_value   => "~/.config/subtle/battery_rules.rb"
+    },
+    {
+      :name        => "time",
+      :type        => "bool",
+      :description => "Show remaining time",
+      :def_value   => "false",
     }]
 end
