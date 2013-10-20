@@ -250,9 +250,11 @@ on :run do |s| # {{{
       s.color_icon ? s.color : s.color_def, s.icons[icon],
       s.color_text ? s.color : s.color_def, percent
     ]
-    if s.time
+    if s.time && time.to_s != 'infinity'
       data << s.separator
-      data << "#{time.round(2)}h"
+      hours = time.to_i
+      minutes = ((time - time.to_i) * 60).round
+      data << "#{hours}:#{minutes}"
     end
 
     if s.power
