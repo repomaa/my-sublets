@@ -254,7 +254,7 @@ on :run do |s| # {{{
       data << s.separator
       hours = time.to_i
       minutes = ((time - time.to_i) * 60).round
-      data << "#{hours}:#{minutes}"
+      data << "#{hours}:#{"%02d" % minutes}"
     end
 
     if s.power
