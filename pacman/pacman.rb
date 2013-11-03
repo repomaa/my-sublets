@@ -4,6 +4,7 @@ configure :pacman do |s|
   s.icon = Subtlext::Icon.new( "pacman.xbm" )
   s.dot = Subtlext::Icon.new( "dot.xbm" )
   s.bigdot = Subtlext::Icon.new( "bigdot.xbm" )
+  s.fleeing_ghost = Subtlext::Icon.new( "fleeing_ghost.xbm" )
   s.interval =   s.config[:interval]   || 3600
   s.serious = true unless s.config[:serious] == false
   if s.serious
@@ -42,6 +43,7 @@ helper do |s|
       h[name] = 0
     end
 
+    kernel_update = false
     # Count occurences of "core", "extra" and "community" in details
     packages = []
     f.each_line do |line|
@@ -50,6 +52,7 @@ helper do |s|
         unless packages.include? words[1]
           h[words[0]] += 1
           packages << words[1]
+          kernel_update = true if words[1].match(/^linux\s+/)
         end
       end
     end
@@ -76,8 +79,14 @@ helper do |s|
         if h[name] > 0
           count = ""
           color = self.colors[name] || self.color_def
-          (h[name]/10).times { count << color << self.bigdot }
-          (h[name]%10).times { count << color << self.dot }
+          if name == 'core' && kernel_update
+            count << Subtlext::Color.new("#00F") << self.fleeing_ghost
+            ((h[name] - 1)/10).times { count << color << self.bigdot }
+            ((h[name] - 1)%10).times { count << color << self.dot }
+          else
+            (h[name]/10).times { count << color << self.bigdot }
+            (h[name]%10).times { count << color << self.dot }
+          end
           counts << count
         end
       end

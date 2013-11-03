@@ -7,7 +7,7 @@ Sur::Specification.new do |s|
   s.version     = "0.2"
   s.tags        = [ ]
   s.files       = [ "pacman.rb" ]
-  s.icons       = [ "pacman.xbm", "dot.xbm", "bigdot.xbm", "ghost.xbm" ]
+  s.icons       = [ "pacman.xbm", "dot.xbm", "bigdot.xbm", "ghost.xbm", "fleeing_ghost.xbm" ]
 
   # Sublet description
   s.description = "Display pacman available updates"
